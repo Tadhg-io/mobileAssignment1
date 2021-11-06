@@ -15,8 +15,8 @@ class MainApp : Application() {
         i("Placemark started")
 
         // test placemarks
-        placemarks.add(PlacemarkModel("One", "About one..."))
-        placemarks.add(PlacemarkModel("Two", "About two..."))
-        placemarks.add(PlacemarkModel("Three", "About three..."))
+//        placemarks.add(PlacemarkModel("One", "About one..."))
+//        placemarks.add(PlacemarkModel("Two", "About two..."))
+//        placemarks.add(PlacemarkModel("Three", "About three..."))
     }
 }
