@@ -3,9 +3,11 @@ package ie.wit.pintmark.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ie.wit.pintmark.R
 import ie.wit.pintmark.databinding.ActivityPlacemarkListBinding
 import ie.wit.pintmark.databinding.CardPlacemarkBinding
 import ie.wit.pintmark.main.MainApp
@@ -26,6 +28,14 @@ class PlacemarkListActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = PlacemarkAdapter(app.placemarks)
+
+        binding.toolbar.title = title
+        setSupportActionBar(binding.toolbar)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }
 
