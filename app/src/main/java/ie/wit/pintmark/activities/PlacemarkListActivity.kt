@@ -8,10 +8,12 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import ie.wit.pintmark.R
 import ie.wit.pintmark.adapters.PlacemarkAdapter
+import ie.wit.pintmark.adapters.PlacemarkListener
 import ie.wit.pintmark.databinding.ActivityPlacemarkListBinding
 import ie.wit.pintmark.main.MainApp
+import ie.wit.pintmark.models.PlacemarkModel
 
-class PlacemarkListActivity : AppCompatActivity() {
+class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityPlacemarkListBinding
@@ -25,7 +27,7 @@ class PlacemarkListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = PlacemarkAdapter(app.placemarks.findAll())
+        binding.recyclerView.adapter = PlacemarkAdapter(app.placemarks.findAll(),this)
 
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
@@ -46,5 +48,11 @@ class PlacemarkListActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPlacemarkClick(placemark: PlacemarkModel) {
+        val launcherIntent = Intent(this, PlacemarkActivity::class.java)
+        launcherIntent.putExtra("placemark_edit", placemark)
+        startActivityForResult(launcherIntent,0)
     }
 }
