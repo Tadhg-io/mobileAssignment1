@@ -1,30 +1,37 @@
-package ie.wit.pintmark
+package ie.wit.pintmark.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import ie.wit.pintmark.databinding.ActivityPintmarkBinding
+import ie.wit.pintmark.models.PlacemarkModel
 import timber.log.Timber
 import timber.log.Timber.i
 
-class PintmarkerActivity : AppCompatActivity() {
+class PlacemarkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPintmarkBinding
+    var placemark = PlacemarkModel()
+    val placemarks = ArrayList<PlacemarkModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pintmark)
-
-        // plant a debug tree
-        Timber.plant(Timber.DebugTree())
-        i("Pintmark Activity started..")
 
         binding = ActivityPintmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Timber.plant(Timber.DebugTree())
+
+        i("Placemark Activity started...")
+
         binding.btnAdd.setOnClickListener() {
-            val placemarkTitle = binding.placemarkTitle.text.toString()
-            if (placemarkTitle.isNotEmpty()) {
-                i("add Button Pressed: $placemarkTitle")
+            placemark.title = binding.placemarkTitle.text.toString()
+            placemark.description = binding.placemarkDescription.text.toString()
+            if (placemark.title.isNotEmpty()) {
+                placemarks.add(placemark.copy())
+                i("add Button Pressed: $placemark.title")
+                for (i in placemarks.indices)
+                { i("Placemark[$i]:${this.placemarks[i]}") }
             }
             else {
                 Snackbar
