@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import ie.wit.pintmark.databinding.ActivityPintmarkBinding
+import ie.wit.pintmark.main.MainApp
 import ie.wit.pintmark.models.PlacemarkModel
 import timber.log.Timber
 import timber.log.Timber.i
@@ -12,30 +13,27 @@ class PlacemarkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPintmarkBinding
     var placemark = PlacemarkModel()
-    val placemarks = ArrayList<PlacemarkModel>()
+    lateinit var app : MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityPintmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Timber.plant(Timber.DebugTree())
-
+        app = application as MainApp
         i("Placemark Activity started...")
-
         binding.btnAdd.setOnClickListener() {
             placemark.title = binding.placemarkTitle.text.toString()
             placemark.description = binding.placemarkDescription.text.toString()
             if (placemark.title.isNotEmpty()) {
-                placemarks.add(placemark.copy())
-                i("add Button Pressed: $placemark.title")
-                for (i in placemarks.indices)
-                { i("Placemark[$i]:${this.placemarks[i]}") }
+                app.placemarks.add(placemark.copy())
+                i("add Button Pressed: ${placemark}")
+                for (i in app.placemarks.indices) {
+                    i("Placemark[$i]:${app.placemarks[i]}")
+                }
             }
             else {
-                Snackbar
-                    .make(it,"Please Enter a title", Snackbar.LENGTH_LONG)
+                Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG)
                     .show()
             }
         }
