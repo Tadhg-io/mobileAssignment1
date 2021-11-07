@@ -14,6 +14,7 @@ import ie.wit.pintmark.R
 import ie.wit.pintmark.databinding.ActivityPintmarkBinding
 import ie.wit.pintmark.helpers.showImagePicker
 import ie.wit.pintmark.main.MainApp
+import ie.wit.pintmark.models.Location
 import ie.wit.pintmark.models.PlacemarkModel
 import timber.log.Timber.i
 
@@ -25,6 +26,7 @@ class PlacemarkActivity : AppCompatActivity() {
     var placemark = PlacemarkModel()
     lateinit var app : MainApp
     var edit = false
+    var location = Location(52.245696, -7.139102, 15f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,7 @@ class PlacemarkActivity : AppCompatActivity() {
 
         binding.placemarkLocation.setOnClickListener {
             val launcherIntent = Intent(this, MapActivity::class.java)
+                .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
 
@@ -117,6 +120,17 @@ class PlacemarkActivity : AppCompatActivity() {
     private fun registerMapCallback() {
         mapIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { i("Map Loaded") }
+            { result ->
+                when (result.resultCode) {
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Location ${result.data.toString()}")
+                            location = result.data!!.extras?.getParcelable("location")!!
+                            i("Location == $location")
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
     }
 }
