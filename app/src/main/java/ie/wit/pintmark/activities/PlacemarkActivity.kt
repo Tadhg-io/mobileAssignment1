@@ -15,13 +15,13 @@ import ie.wit.pintmark.databinding.ActivityPintmarkBinding
 import ie.wit.pintmark.helpers.showImagePicker
 import ie.wit.pintmark.main.MainApp
 import ie.wit.pintmark.models.PlacemarkModel
-import timber.log.Timber
 import timber.log.Timber.i
 
 class PlacemarkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPintmarkBinding
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     var placemark = PlacemarkModel()
     lateinit var app : MainApp
     var edit = false
@@ -38,6 +38,7 @@ class PlacemarkActivity : AppCompatActivity() {
             showImagePicker(imageIntentLauncher)
         }
         registerImagePickerCallback()
+        registerMapCallback()
 
         app = application as MainApp
         i("Placemark Activity started...")
@@ -57,7 +58,8 @@ class PlacemarkActivity : AppCompatActivity() {
         }
 
         binding.placemarkLocation.setOnClickListener {
-            i ("Set Location Pressed")
+            val launcherIntent = Intent(this, MapActivity::class.java)
+            mapIntentLauncher.launch(launcherIntent)
         }
 
         binding.btnAdd.setOnClickListener() {
@@ -110,5 +112,11 @@ class PlacemarkActivity : AppCompatActivity() {
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
+    }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { i("Map Loaded") }
     }
 }
