@@ -35,7 +35,7 @@ class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
 
-
+        registerRefreshCallback()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

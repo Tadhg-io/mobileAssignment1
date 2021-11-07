@@ -56,6 +56,10 @@ class PlacemarkActivity : AppCompatActivity() {
             }
         }
 
+        binding.placemarkLocation.setOnClickListener {
+            i ("Set Location Pressed")
+        }
+
         binding.btnAdd.setOnClickListener() {
             placemark.title = binding.placemarkTitle.text.toString()
             placemark.description = binding.placemarkDescription.text.toString()
@@ -68,9 +72,9 @@ class PlacemarkActivity : AppCompatActivity() {
                 } else {
                     app.placemarks.create(placemark.copy())
                 }
+                setResult(RESULT_OK)
+                finish()
             }
-            setResult(RESULT_OK)
-            finish()
         }
     }
 
