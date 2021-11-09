@@ -116,6 +116,9 @@ class PlacemarkActivity : AppCompatActivity() {
             if (placemark.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_placemark_title, Snackbar.LENGTH_LONG)
                     .show()
+            } else if (placemark.title.length < 5) {
+                Snackbar.make(it,R.string.length_placemark_title, Snackbar.LENGTH_LONG)
+                    .show()
             } else {
                 if (edit) {
                     app.placemarks.update(placemark.copy())
