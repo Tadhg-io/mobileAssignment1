@@ -13,15 +13,15 @@ const val JSON_FILE = "placemarks.json"
 val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting()
     .registerTypeAdapter(Uri::class.java, UriParser())
     .create()
-val listType: Type = object : TypeToken<ArrayList<PlacemarkModel>>() {}.type
+val listType: Type = object : TypeToken<ArrayList<MarkerModel>>() {}.type
 
 fun generateRandomId(): Long {
     return Random().nextLong()
 }
 
-class PlacemarkJSONStore(private val context: Context) : PlacemarkStore {
+class MarkerJSONStore(private val context: Context) : MarkerStore {
 
-    var placemarks = mutableListOf<PlacemarkModel>()
+    var placemarks = mutableListOf<MarkerModel>()
 
     init {
         if (exists(context, JSON_FILE)) {
@@ -29,19 +29,19 @@ class PlacemarkJSONStore(private val context: Context) : PlacemarkStore {
         }
     }
 
-    override fun findAll(): MutableList<PlacemarkModel> {
+    override fun findAll(): MutableList<MarkerModel> {
         logAll()
         return placemarks
     }
 
-    override fun create(placemark: PlacemarkModel) {
+    override fun create(placemark: MarkerModel) {
         placemark.id = generateRandomId()
         placemarks.add(placemark)
         serialize()
     }
 
 
-    override fun update(placemark: PlacemarkModel) {
+    override fun update(placemark: MarkerModel) {
         // todo
     }
 

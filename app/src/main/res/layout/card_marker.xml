@@ -20,14 +20,14 @@
             android:layout_height="64dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
-            android:contentDescription="@string/change_placemark_image"
+            android:contentDescription="@string/change_marker_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/placemarkTitle"
+            android:id="@+id/markerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.052"
             app:layout_constraintStart_toEndOf="@+id/imageIcon"
-            app:layout_constraintTop_toBottomOf="@id/placemarkTitle"
+            app:layout_constraintTop_toBottomOf="@id/markerTitle"
             tools:text="A Description"/>
 
         <TextView

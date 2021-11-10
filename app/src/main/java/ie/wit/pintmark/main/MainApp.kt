@@ -1,26 +1,20 @@
 package ie.wit.pintmark.main
 
 import android.app.Application
-import ie.wit.pintmark.models.PlacemarkMemStore
-import ie.wit.pintmark.models.PlacemarkJSONStore
-import ie.wit.pintmark.models.PlacemarkStore
+import ie.wit.pintmark.models.MarkerJSONStore
+import ie.wit.pintmark.models.MarkerStore
 import timber.log.Timber
 import timber.log.Timber.i
 
 class MainApp : Application() {
 
-    // variable to store the placemarks
-    lateinit var placemarks: PlacemarkStore
+    // variable to store the markers
+    lateinit var markers: MarkerStore
 
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        placemarks = PlacemarkJSONStore(applicationContext)
-        i("Placemark started")
-
-        // test placemarks
-//        placemarks.add(PlacemarkModel("One", "About one..."))
-//        placemarks.add(PlacemarkModel("Two", "About two..."))
-//        placemarks.add(PlacemarkModel("Three", "About three..."))
+        markers = MarkerJSONStore(applicationContext)
+        i("Main App started")
     }
 }

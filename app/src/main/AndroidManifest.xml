@@ -36,7 +36,7 @@
             android:exported="true"
             android:label="@string/title_activity_map" />
         <activity
-            android:name=".activities.PlacemarkListActivity"
+            android:name=".activities.MarkerListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.PlacemarkActivity"
+            android:name=".activities.MarkerActivity"
             android:exported="true"></activity>
     </application>
 

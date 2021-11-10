@@ -9,28 +9,29 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import ie.wit.pintmark.R
-import ie.wit.pintmark.adapters.PlacemarkAdapter
-import ie.wit.pintmark.adapters.PlacemarkListener
-import ie.wit.pintmark.databinding.ActivityPlacemarkListBinding
+import ie.wit.pintmark.adapters.PintmarkAdapter
+import ie.wit.pintmark.adapters.PintmarkListener
+import ie.wit.pintmark.databinding.ActivityMarkerListBinding
 import ie.wit.pintmark.main.MainApp
-import ie.wit.pintmark.models.PlacemarkModel
+import ie.wit.pintmark.models.MarkerModel
 
-class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
+class MarkerListActivity : AppCompatActivity(), PintmarkListener {
 
     lateinit var app: MainApp
-    private lateinit var binding: ActivityPlacemarkListBinding
+    private lateinit var binding: ActivityMarkerListBinding
     private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPlacemarkListBinding.inflate(layoutInflater)
+        binding = ActivityMarkerListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         app = application as MainApp
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = PlacemarkAdapter(app.placemarks.findAll(),this)
+        binding.recyclerView.adapter = PintmarkAdapter(app.markers.findAll(),this)
 
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
@@ -46,16 +47,16 @@ class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_add -> {
-                val launcherIntent = Intent(this, PlacemarkActivity::class.java)
+                val launcherIntent = Intent(this, MarkerActivity::class.java)
                 refreshIntentLauncher.launch(launcherIntent)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onPlacemarkClick(placemark: PlacemarkModel) {
-        val launcherIntent = Intent(this, PlacemarkActivity::class.java)
-        launcherIntent.putExtra("placemark_edit", placemark)
+    override fun onMarkerClick(marker: MarkerModel) {
+        val launcherIntent = Intent(this, MarkerActivity::class.java)
+        launcherIntent.putExtra("edit_marker", marker)
         refreshIntentLauncher.launch(launcherIntent)
     }
 

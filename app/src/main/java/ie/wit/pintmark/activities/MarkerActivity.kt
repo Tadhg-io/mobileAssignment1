@@ -10,38 +10,32 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import ie.wit.pintmark.R
-import ie.wit.pintmark.databinding.ActivityPintmarkBinding
+import ie.wit.pintmark.databinding.ActivityMarkerBinding
 import ie.wit.pintmark.helpers.showImagePicker
 import ie.wit.pintmark.main.MainApp
 import ie.wit.pintmark.models.Location
-import ie.wit.pintmark.models.PlacemarkModel
+import ie.wit.pintmark.models.MarkerModel
 import timber.log.Timber.i
-import android.widget.TextView
-
-import android.view.ViewGroup
 
 
+class MarkerActivity : AppCompatActivity() {
 
-
-class PlacemarkActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityPintmarkBinding
+    private lateinit var binding: ActivityMarkerBinding
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
-    var placemark = PlacemarkModel()
+    var marker = MarkerModel()
     lateinit var app : MainApp
     var edit = false
     var selectedCategory = "PUB"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPintmarkBinding.inflate(layoutInflater)
+        binding = ActivityMarkerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.toolbarAdd.title = title
@@ -54,7 +48,7 @@ class PlacemarkActivity : AppCompatActivity() {
         registerMapCallback()
 
         app = application as MainApp
-        i("Placemark Activity started...")
+        i("Marker Activity started...")
 
         val categories = resources.getStringArray(R.array.categories)
         val spinner: Spinner = findViewById(R.id.category)
@@ -82,27 +76,27 @@ class PlacemarkActivity : AppCompatActivity() {
             }
         }
 
-        if (intent.hasExtra("placemark_edit")) {
+        if (intent.hasExtra("edit_marker")) {
             edit = true
-            placemark = intent.extras?.getParcelable("placemark_edit")!!
-            binding.placemarkTitle.setText(placemark.title)
-            binding.placemarkDescription.setText(placemark.description)
-            binding.btnAdd.setText(R.string.save_placemark)
-            binding.category.setSelection(categories.indexOf(placemark.category.toString()))
+            marker = intent.extras?.getParcelable("edit_marker")!!
+            binding.markerTitle.setText(marker.title)
+            binding.markerDescription.setText(marker.description)
+            binding.btnAdd.setText(R.string.save_marker)
+            binding.category.setSelection(categories.indexOf(marker.category.toString()))
             Picasso.get()
-                .load(placemark.image)
-                .into(binding.placemarkImage)
-            if (placemark.image != Uri.EMPTY) {
-                binding.chooseImage.setText(R.string.change_placemark_image)
+                .load(marker.image)
+                .into(binding.image)
+            if (marker.image != Uri.EMPTY) {
+                binding.chooseImage.setText(R.string.change_marker_image)
             }
         }
 
-        binding.placemarkLocation.setOnClickListener {
+        binding.markerLocation.setOnClickListener {
             val location = Location(52.245696, -7.139102, 15f)
-            if (placemark.zoom != 0f) {
-                location.lat =  placemark.lat
-                location.lng = placemark.lng
-                location.zoom = placemark.zoom
+            if (marker.zoom != 0f) {
+                location.lat =  marker.lat
+                location.lng = marker.lng
+                location.zoom = marker.zoom
             }
             val launcherIntent = Intent(this, MapActivity::class.java)
                 .putExtra("location", location)
@@ -110,20 +104,20 @@ class PlacemarkActivity : AppCompatActivity() {
         }
 
         binding.btnAdd.setOnClickListener() {
-            placemark.title = binding.placemarkTitle.text.toString()
-            placemark.description = binding.placemarkDescription.text.toString()
-            placemark.category = selectedCategory
-            if (placemark.title.isEmpty()) {
-                Snackbar.make(it,R.string.enter_placemark_title, Snackbar.LENGTH_LONG)
+            marker.title = binding.markerTitle.text.toString()
+            marker.description = binding.markerDescription.text.toString()
+            marker.category = selectedCategory
+            if (marker.title.isEmpty()) {
+                Snackbar.make(it,R.string.enter_marker_title, Snackbar.LENGTH_LONG)
                     .show()
-            } else if (placemark.title.length < 5) {
-                Snackbar.make(it,R.string.length_placemark_title, Snackbar.LENGTH_LONG)
+            } else if (marker.title.length < 5) {
+                Snackbar.make(it,R.string.length_marker_title, Snackbar.LENGTH_LONG)
                     .show()
             } else {
                 if (edit) {
-                    app.placemarks.update(placemark.copy())
+                    app.markers.update(marker.copy())
                 } else {
-                    app.placemarks.create(placemark.copy())
+                    app.markers.create(marker.copy())
                 }
                 setResult(RESULT_OK)
                 finish()
@@ -132,7 +126,7 @@ class PlacemarkActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_placemark, menu)
+        menuInflater.inflate(R.menu.menu_marker, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -153,11 +147,11 @@ class PlacemarkActivity : AppCompatActivity() {
                     RESULT_OK -> {
                         if (result.data != null) {
                             i("Got Result ${result.data!!.data}")
-                            placemark.image = result.data!!.data!!
+                            marker.image = result.data!!.data!!
                             Picasso.get()
-                                .load(placemark.image)
-                                .into(binding.placemarkImage)
-                            binding.chooseImage.setText(R.string.change_placemark_image)
+                                .load(marker.image)
+                                .into(binding.image)
+                            binding.chooseImage.setText(R.string.change_marker_image)
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }
@@ -175,9 +169,9 @@ class PlacemarkActivity : AppCompatActivity() {
                             i("Got Location ${result.data.toString()}")
                             val location = result.data!!.extras?.getParcelable<Location>("location")!!
                             i("Location == $location")
-                            placemark.lat = location.lat
-                            placemark.lng = location.lng
-                            placemark.zoom = location.zoom
+                            marker.lat = location.lat
+                            marker.lng = location.lng
+                            marker.zoom = location.zoom
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }
